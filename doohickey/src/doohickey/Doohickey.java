@@ -125,9 +125,9 @@ public class Doohickey extends Application {
       
         @Override
         protected double computeValue() {
-            if(services == null) return -5; //accounts for erroneous initalization
+            if (services == null) return -5; //accounts for erroneous initalization
             double temp = 0;
-            for(ProcessService s: services) temp+= s.getHeadway();
+            for (ProcessService s: services) temp+= s.getHeadway();
             //System.out.println("Progress: " + temp/4);
             return temp/4;
         }           
@@ -206,9 +206,9 @@ public class Doohickey extends Application {
     //Gets properties from saved file, if any.
     public Props initProps()
     {
-        if(PROPERTIES.isFile() && PROPERTIES.exists())
+        if (PROPERTIES.isFile() && PROPERTIES.exists())
                 {
-                if(!PROPERTIES.canRead()) { return new Props();}
+                if (!PROPERTIES.canRead()) { return new Props();}
                 try{    
                         Scanner s = new Scanner(PROPERTIES);
                         Props output = new Props();
@@ -216,17 +216,17 @@ public class Doohickey extends Application {
                         // destination y
                         // format z
                         //target t
-                        while(s.hasNextLine())
+                        while (s.hasNextLine())
                         {
                             String line = s.nextLine();
-                            if(line.indexOf(sourceHash) != -1)
+                            if (line.indexOf(sourceHash) != -1)
                             {
                                 String source = line.substring(line.indexOf(sourceHash)+ sourceHash.length()+1);
                                 source = source.trim();
                                 output.setSource(source);
                             }
                             else output.setSource("");
-                            if(line.indexOf(destHash) !=-1)
+                            if (line.indexOf(destHash) !=-1)
                             {
                                 defaultDest = line.substring(line.indexOf(destHash) + destHash.length()+1);
                                 defaultDest = defaultDest.replace(".", "");
@@ -234,14 +234,14 @@ public class Doohickey extends Application {
                                 output.setDest(defaultDest);
                             }
                             else output.setDest("");
-                            if(line.indexOf(formatHash) != -1)
+                            if (line.indexOf(formatHash) != -1)
                             {
                                 format = line.substring(line.indexOf(formatHash)+ formatHash.length()+1);
                                 format.trim();
                                // System.out.println(format);
                             } //format stuff here
                             else output.setFormat("");
-                            if(line.indexOf(targetHash) != -1)
+                            if (line.indexOf(targetHash) != -1)
                             {
                             
                                 target = line.substring(line.indexOf(targetHash) + targetHash.length()+1);
@@ -253,7 +253,7 @@ public class Doohickey extends Application {
                         s.close();
                         return output;
                         }          
-                catch(Exception e)
+                catch (Exception e)
                         { return new Props(); }
                 }  
         else {
@@ -267,8 +267,8 @@ public class Doohickey extends Application {
         public void handle(Event evt)
         {
           Object evtSource = evt.getSource();  
-          if(evtSource == go) { //toDo: needs a state var so operation can be cancelled. Button should be changed to read BUTTON_HALT. Also need to handle completion...
-              if(running) {  
+          if (evtSource == go) { //toDo: needs a state var so operation can be cancelled. Button should be changed to read BUTTON_HALT. Also need to handle completion...
+              if (running) {  
                   //cancellation stuff goes here, then rearm
                   boolean retain = false;
                   //boolean whether = checkCancel(); TODO
@@ -283,13 +283,13 @@ public class Doohickey extends Application {
               format = type.getText();
               //System.out.println(format);
               //System.out.println(destD);
-              if(sourceD == null) 
+              if (sourceD == null) 
               {
                   status.setText("No source directory has been entered");
                   from.requestFocus();        
                   return;
               }
-              else if(destD == null)
+              else if (destD == null)
               {
                   status.setText("No destination directory has been entered");
                   to.requestFocus();
@@ -297,7 +297,7 @@ public class Doohickey extends Application {
               }
               source = new File(sourceD);
               dest = new File(destD);
-              if(validate(dest) && validate(source))
+              if (validate(dest) && validate(source))
               { 
                   running = true;
                   arm(false);
@@ -308,14 +308,14 @@ public class Doohickey extends Application {
                   while(directories.peek() != null)
                   {
                    File[] contents = directories.poll().listFiles();
-                   for(File f: contents)
+                   for (File f: contents)
                    {
-                       if(f.isDirectory()) directories.add(f);
+                       if (f.isDirectory()) directories.add(f);
                        else
                        { //doesn't detect files; check
                            String name = f.getName();
-                           if(format != null) {
-                           if(name.substring(name.lastIndexOf('.')+1).equals(format)) 
+                           if (format != null) {
+                           if (name.substring(name.lastIndexOf('.')+1).equals(format)) 
                            {
                                toCopy.add(f);
                                 ++files;
@@ -343,10 +343,10 @@ public class Doohickey extends Application {
                     LinkedList<LinkedList<File>> jobList = new LinkedList<>();
                     LinkedList<File> job;
                     int limit = jobs-1;
-                    for(int i = 0 ; i < limit; i++)
+                    for (int i = 0 ; i < limit; i++)
                     { 
                         job = new LinkedList<>();
-                        for(int j = 0 ; j < jobSize; j++)
+                        for (int j = 0 ; j < jobSize; j++)
                           {
                               job.add(toCopy.poll());
                           }
@@ -355,7 +355,7 @@ public class Doohickey extends Application {
                       } //ends for
                      jobList.add(toCopy); //catches any awkward leftovers
                     services = new LinkedList<>();
-                    while(jobList.peek()!= null)
+                    while (jobList.peek()!= null)
                            {
                            ProcessService p = new ProcessService(destD, target);
                            p.addJob(jobList.poll());
@@ -384,43 +384,43 @@ public class Doohickey extends Application {
                 status.setText(DEFAULT_STATUS);             
               }
           }    
-          else if(evtSource == browseSource)
+          else if (evtSource == browseSource)
           { //show browser for a source dir and pass return to all needed vars
-              if(dC == null) dC = new DirectoryChooser();
+              if (dC == null) dC = new DirectoryChooser();
               dC.setTitle("Select source directory");
               source = dC.showDialog(stage);
               from.setText(source.toString());
           }
-          else if(evtSource == browseDest)
+          else if (evtSource == browseDest)
           { //show destination popup and assign returned value to all appropriate vars
-              if(dC == null) dC = new DirectoryChooser();
+              if (dC == null) dC = new DirectoryChooser();
               dC.setTitle("Select destination directory");
               dest = dC.showDialog(stage);
               to.setText(dest.toString());
           }
-          else if(evtSource == quit)   doQuit();
+          else if (evtSource == quit)   doQuit();
           //Any of the following 4 indicate a change to the default settings which needs to be saved later.
           else if (evtSource == setDefaultSource) {
-              if(defaultSourceChange) defaultSourceChange = false;
+              if (defaultSourceChange) defaultSourceChange = false;
               else defaultSourceChange = true;
           }
-          else if(evtSource == setDefaultDest) {
-              if(defaultDestChange) defaultDestChange = false;
+          else if (evtSource == setDefaultDest) {
+              if (defaultDestChange) defaultDestChange = false;
               else defaultDestChange = true;                  
               }
-          else if(evtSource == formatCbox) {
-              if(defaultFormatChange) defaultFormatChange = false;
+          else if (evtSource == formatCbox) {
+              if (defaultFormatChange) defaultFormatChange = false;
               else defaultFormatChange = true;                  
           }
-          else if(evtSource == targetCbox) {
-              if(defaultTargetChange) defaultTargetChange = false;
+          else if (evtSource == targetCbox) {
+              if (defaultTargetChange) defaultTargetChange = false;
               else defaultTargetChange = true;
           }
-          else if(evtSource == okay) {
+          else if (evtSource == okay) {
               confirm =  true;
               temp.close();
           }
-          else if(evtSource == cancel) {
+          else if (evtSource == cancel) {
               confirm = false;
               temp.close();
           }
@@ -434,13 +434,13 @@ public class Doohickey extends Application {
             String nextDest;
             String nextFormat;
             String nextTarget;
-            if(defaultSourceChange) nextSource = from.getText();
+            if (defaultSourceChange) nextSource = from.getText();
             else nextSource = DEFAULTPROPS.getSource();
-            if(defaultDestChange) nextDest = to.getText();
+            if (defaultDestChange) nextDest = to.getText();
             else nextDest = DEFAULTPROPS.getDest();
-            if(defaultTargetChange) nextTarget = toRemove.getText();
+            if (defaultTargetChange) nextTarget = toRemove.getText();
             else nextTarget = DEFAULTPROPS.getTarget();
-            if(defaultFormatChange) nextFormat = type.getText();
+            if (defaultFormatChange) nextFormat = type.getText();
             else nextFormat = DEFAULTPROPS.getFormat();
             try{
                 //format: source x
@@ -465,7 +465,7 @@ public class Doohickey extends Application {
        
     public boolean validate(File f)
     { 
-        if((!f.exists() || !f.canRead())) {
+        if ((!f.exists() || !f.canRead())) {
             status.setText("Check input directories; error.");
             return false;
         }
@@ -506,7 +506,7 @@ public class Doohickey extends Application {
   //arms or disarms interface as specified
   private void arm(boolean whether)
   {
-   if(whether)
+   if (whether)
    {
        browseSource.arm();
        browseDest.arm();
@@ -544,10 +544,10 @@ public class Doohickey extends Application {
     int longest = 50;
     for (ProcessService pS: services)
     {
-        if(pS.getState() != Worker.State.SUCCEEDED)
+        if (pS.getState() != Worker.State.SUCCEEDED)
         {
              success = false;
-             for(File file: pS.getRemaining())
+             for (File file: pS.getRemaining())
              {
                  String temp = file.getName();
                  notCopied.add(temp);
@@ -558,9 +558,9 @@ public class Doohickey extends Application {
     }
     String successOutput = "Copied " + files + " files to " + destD;
     String failOutput = "Files not copied: \n";
-    for(String string: notCopied) failOutput += string + "\n";
+    for (String string: notCopied) failOutput += string + "\n";
     TextArea summaryText; 
-    if(success) summaryText = new TextArea(successOutput);
+    if (success) summaryText = new TextArea(successOutput);
     else {
         summaryText = new TextArea(failOutput);
         summaryText.setPrefRowCount(size);
@@ -577,7 +577,7 @@ public class Doohickey extends Application {
     f.getChildren().addAll(summaryText, b);
     Scene sc;
     //really needs a  pane with a scrollbar
-    if(size <=10) sc = new Scene(f, 200, 100+ (40*size));
+    if (size <=10) sc = new Scene(f, 200, 100+ (40*size));
     else sc= new Scene(f, 200, 400);
     s.setScene(sc);
     s.show();
