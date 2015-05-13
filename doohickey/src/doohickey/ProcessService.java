@@ -87,7 +87,7 @@ public class ProcessService extends Service {
             try {
                 while(l.peek() !=null)
                 {
-                   if(this.isCancelled())
+                   if (this.isCancelled())
                    {/* Not necessarily useful
                        if(retain) return true;
                        else {
@@ -101,7 +101,7 @@ public class ProcessService extends Service {
                 }
                 return true;
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 e.getMessage();
                 return false;}
         } //ends call
@@ -112,18 +112,18 @@ public class ProcessService extends Service {
         //name: destination directory and source name()substring after last \\
             String newName = DESTD + "\\" + shorten(f.getName());
             //System.out.println(newName);
-            if(!f.exists()) System.out.println("process input null");
+            if (!f.exists()) System.out.println("process input null");
             File output = new File(newName);
             try{
                 FileInputStream in = new FileInputStream(f);
                 FileOutputStream out = new FileOutputStream(output);
                 byte[] buffer = new byte[BUFFERSIZE];
-                while(in.read(buffer)>-1)
+                while (in.read(buffer)>-1)
                 {
                     try{
                    out.write(buffer);
                     }
-                    catch(IOException e)
+                    catch (IOException e)
                     {
                     System.out.println("Write error!");
                     }
@@ -133,7 +133,7 @@ public class ProcessService extends Service {
                 out.close();
                 done.add(f); //error here: nullPointerException
             }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace(System.out);
         }
@@ -142,9 +142,9 @@ public class ProcessService extends Service {
         public String shorten(String input)
             {
             //removes _raw. Should point to TARGET instead
-             if(TARGET == null) return input;
+             if (TARGET == null) return input;
              int targetIndex = input.indexOf(TARGET); //writing own stuff: faster?
-             if(targetIndex > -1) {
+             if (targetIndex > -1) {
                  String start = input.substring(0, targetIndex); //magic String will need to go
                  String end = input.substring(targetIndex+TARGET.length());
                  return start+end;   
